@@ -2,6 +2,18 @@
 
 Create a production and development environment and deploy your final project to both environments.
 
+Locally:
+* python ./application/application.py
+
+On AWS:
+* Initialize: eb init
+* Create: eb create hello-world
+* Change the default environment: eb use hello-world
+* Deploy changes: eb deploy
+* Open: eb open
+* Help: eb -h
+
+
 ### Final Project Overview
 The final project consists of building a cloud-native analytics application that is hosted on the Google Cloud Platform (GCP). The goal of this project is to give you the ability to create realistic, working solutions that were created with modern techniques.
 
