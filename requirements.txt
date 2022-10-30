@@ -1,0 +1,7 @@
+boto3==1.*
+jupyter==1.*
+pandas==1.*
+google-cloud-bigquery==3.3.*
+plotly==5.*
+db-dtypes==1.0.*
+google-cloud-automl==2.8.*
