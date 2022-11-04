@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-11-04T16:00:35.633Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" etag="lzgwfNsc92fA6bmaKM9C" version="20.4.1" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-04T22:37:36.885Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" etag="mSHivvEYJPtjViZZjLCp" version="20.4.1" type="github">
   <diagram id="uCUmhPaclYyrkWVYoByS" name="Page-1">
     <mxGraphModel dx="1272" dy="690" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -25,13 +25,31 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="PGNGUmruBmEjUjXc-qWK-29" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="135" y="60" width="420" height="140" as="geometry" />
+          <mxGeometry x="86" y="110" width="520" height="210" as="geometry" />
         </mxCell>
         <mxCell id="PGNGUmruBmEjUjXc-qWK-27" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
-          <mxGeometry width="419.99999999999994" height="140" as="geometry" />
+          <mxGeometry width="519.9999999999999" height="186.07594936708864" as="geometry" />
         </mxCell>
         <mxCell id="PGNGUmruBmEjUjXc-qWK-15" value="Source - Github" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=left;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.git_repository;horizontal=0;direction=south;rotation=90;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
-          <mxGeometry x="4.8" y="6.17" width="28.03" height="30" as="geometry" />
+          <mxGeometry x="5.942857142857142" y="8.200632911392406" width="34.703809523809525" height="39.87341772151899" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-46" value="application.py" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/ionicons-fill-vol-2/512/logo-python-128.png;strokeColor=#A680B8;fontColor=#A680B8;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="40.64619047619048" y="62.35151898734177" width="64.48809523809524" height="64.48809523809524" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-47" value="hello.py" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/ionicons-fill-vol-2/512/logo-python-128.png;strokeColor=#A680B8;fontColor=#A680B8;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="144.00190476190477" y="59.37873417721519" width="70.44047619047619" height="70.44047619047619" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-50" value="Model" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;align=left;verticalAlign=top;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="274.97" y="20" width="232.65" height="152.78" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-48" value="stations_cleanup.py" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/ionicons-fill-vol-2/512/logo-python-128.png;strokeColor=#A680B8;fontColor=#A680B8;fontSize=10;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="304" y="48.07" width="54.49" height="54.49" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-49" value="weather_predictions_autopilot.ipynb" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn1.iconfinder.com/data/icons/ionicons-fill-vol-2/512/logo-python-128.png;strokeColor=#A680B8;fontColor=#A680B8;fontSize=10;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="374" y="80" width="60.31" height="60.31" as="geometry" />
+        </mxCell>
+        <mxCell id="PGNGUmruBmEjUjXc-qWK-51" value="App" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;align=left;verticalAlign=top;" vertex="1" parent="PGNGUmruBmEjUjXc-qWK-29">
+          <mxGeometry x="20" y="50" width="236.65" height="124.34" as="geometry" />
         </mxCell>
         <mxCell id="PGNGUmruBmEjUjXc-qWK-36" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;dashed=1;fontColor=#009900;" edge="1" parent="1" source="PGNGUmruBmEjUjXc-qWK-30" target="PGNGUmruBmEjUjXc-qWK-31">
           <mxGeometry relative="1" as="geometry" />
