@@ -14,6 +14,9 @@ On AWS:
 * Help: eb -h
 
 
+## Pipeline:
+https://aws.amazon.com/getting-started/hands-on/continuous-deployment-pipeline/
+
 ### Final Project Overview
 The final project consists of building a cloud-native analytics application that is hosted on the Google Cloud Platform (GCP). The goal of this project is to give you the ability to create realistic, working solutions that were created with modern techniques.
 
