@@ -35,3 +35,5 @@ __Project Requirements__
 * Google App Engine serves out HTTP requests via REST API with a JSON payload
 * Deployed into GCP environment
 * A two-page, single-spaced paper describing the project as a consultant would describe it to a client during the hand-off phase.
+
+
