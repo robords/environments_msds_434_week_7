@@ -11,8 +11,11 @@ def index():
     except KeyError: 
         endpoint = 'Local'
     greeting = hello(f'AWS EB! This is the {endpoint} Environment')
-    data = snow_forecast_data('FL')
-    data['greeting'] = greeting
+    return greeting
+
+@application.route('/states/<some_state>')
+def weather_page(some_state):
+    data = snow_forecast_data(f'{some_state}')
     resp = jsonify(data)
     resp.status_code = 200
     return resp
