@@ -16,13 +16,14 @@ def snow_forecast_data(state):
     FORECAST_NAME = "SNOW_FORECAST"
 
     if FORECAST_NAME in [i['ForecastName'] for i in client.list_forecasts()['Forecasts']]:
-        print('Already Exists')
+        print('Found ARN')
         forecast_arn = ([item for item in client.list_forecasts()['Forecasts'] 
                              if item["ForecastName"] == FORECAST_NAME][0]['ForecastArn'])
-    
-    result = forecastquery.query_forecast(
-        ForecastArn=forecast_arn,
-        Filters={"item_id": state}
-    )
+        result = forecastquery.query_forecast(
+            ForecastArn=forecast_arn,
+            Filters={"item_id": state}
+        )
+    else:
+        result = f"Could not find forecast {FORECAST_NAME}"
     
     return result
