@@ -2,8 +2,8 @@ import pandas as pd
 import boto3
 import json
 
-client = boto3.client('forecast')
-forecastquery = boto3.client(service_name='forecastquery')
+client = boto3.client('forecast', region_name='us-east-1')
+forecastquery = boto3.client(service_name='forecastquery', region_name='us-east-1')
 
 def hello(environment):
     """Return a friendly HTTP greeting."""
