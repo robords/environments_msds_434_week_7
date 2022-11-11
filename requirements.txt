@@ -5,3 +5,4 @@ plotly==5.*
 db-dtypes==1.0.*
 Flask==2.1.*
 awscli==1.*
+matplotlib==3.5.*
