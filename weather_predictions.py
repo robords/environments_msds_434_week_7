@@ -29,7 +29,7 @@ def get_forecast_data(item, forecast_name):
     return result
 
 
-def plot_forecast_data(item, forecast_name):
+def plot_forecast_data(item, forecast_name, percentile='p50'):
     """Return the forecast data in chart format
     {
       "Forecast": {
@@ -42,9 +42,9 @@ def plot_forecast_data(item, forecast_name):
     """
 
     result = get_forecast_data(item, forecast_name)
-    p50 = result['Forecast']['Predictions']['p50']
-    value_list = [i['Value'] for i in p50]
-    timestamp = [i['Timestamp'] for i in p50]
+    percentile = result['Forecast']['Predictions'][percentile]
+    value_list = [i['Value'] for i in percentile]
+    timestamp = [i['Timestamp'] for i in percentile]
     
     return timestamp, value_list
 

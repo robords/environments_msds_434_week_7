@@ -1,4 +1,6 @@
 from weather_predictions import hello, get_forecast_data, plot_forecast_data, get_list_of_services
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
@@ -6,6 +8,8 @@ from flask import Flask, jsonify, Response, render_template, request
 import os
 import io
 import numpy as np
+import pandas as pd
+import seaborn as sns
 plt.rcParams["figure.figsize"] = [7.50, 3.50]
 plt.rcParams["figure.autolayout"] = True
 
@@ -34,12 +38,44 @@ def cost_page(service):
     resp.status_code = 200
     return resp
 
-@application.route('/costs/<service>/plot')
+@application.route('/costs/<service>/plot/p50')
 def plot_service(service):
-    fig = Figure()
-    axis = fig.add_subplot(1, 1, 1)
-    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3")
-    axis.plot(xs, ys)
+    fig,ax=plt.subplots(figsize=(6,6))
+    ax=sns.set(style="darkgrid")
+    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p50')
+    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+    df['date'] = pd.to_datetime(df['date'])
+    chart = sns.lineplot(x='date',y='cost', data=df)
+    for item in chart.get_xticklabels():
+        item.set_rotation(45)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+@application.route('/costs/<service>/plot/p10')
+def plot_service_p10(service):
+    fig,ax=plt.subplots(figsize=(6,6))
+    ax=sns.set(style="darkgrid")
+    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p10')
+    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+    df['date'] = pd.to_datetime(df['date'])
+    chart = sns.lineplot(x='date',y='cost', data=df)
+    for item in chart.get_xticklabels():
+        item.set_rotation(45)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
+
+@application.route('/costs/<service>/plot/p90')
+def plot_service_p90(service):
+    fig,ax=plt.subplots(figsize=(10,5))
+    ax=sns.set(style="darkgrid")
+    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p90')
+    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+    df['date'] = pd.to_datetime(df['date'])
+    chart = sns.lineplot(x='date',y='cost', data=df)
+    for item in chart.get_xticklabels():
+        item.set_rotation(45)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
