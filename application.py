@@ -1,4 +1,4 @@
-from weather_predictions import hello, get_forecast_data
+from weather_predictions import hello, get_forecast_data, plot_forecast_data
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
@@ -32,6 +32,16 @@ def cost_page(service):
     resp = jsonify(data)
     resp.status_code = 200
     return resp
+
+@application.route('/costs/<service>/plot')
+def plot_service(service):
+    fig = Figure()
+    axis = fig.add_subplot(1, 1, 1)
+    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3")
+    axis.plot(xs, ys)
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
 @application.route('/print-plot')
 def plot_png():

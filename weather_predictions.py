@@ -1,5 +1,4 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 import boto3
 import json
 
@@ -47,4 +46,4 @@ def plot_forecast_data(item, forecast_name):
     value_list = [i['Value'] for i in p50]
     timestamp = [i['Timestamp'] for i in p50]
     
-    return result
+    return timestamp, value_list
