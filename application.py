@@ -1,4 +1,4 @@
-from weather_predictions import hello, get_forecast_data, plot_forecast_data
+from weather_predictions import hello, get_forecast_data, plot_forecast_data, get_list_of_services
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
@@ -16,9 +16,9 @@ def index():
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
-    #greeting = hello(f'AWS EB! This is the {endpoint} Environment')
     colors = ['Red', 'Blue', 'Black', 'Orange']
-    return render_template('test.html', colors=colors, environment=endpoint)
+    df = get_list_of_services()
+    return render_template('test.html', tables=[df.to_html(classes='data')], titles=df.columns.values, colors=colors, environment=endpoint)
 
 @application.route('/states/<some_state>')
 def weather_page(some_state):

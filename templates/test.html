@@ -12,6 +12,11 @@
     <option value="{{colur}}">{{color}}</option>
   {% endfor %}
 </select>
+<h2>Cost Pages</h2>    
+{% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+{% endfor %}
 
 </body>
 </html>
