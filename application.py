@@ -2,7 +2,7 @@ from weather_predictions import hello, get_forecast_data, plot_forecast_data
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify, Response, render_template, request
 import os
 import io
 import numpy as np
@@ -10,14 +10,15 @@ plt.rcParams["figure.figsize"] = [7.50, 3.50]
 plt.rcParams["figure.autolayout"] = True
 
 application = Flask(__name__)
-@application.route('/')
+@application.route('/', methods=['GET'])
 def index():
     try:
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
-    greeting = hello(f'AWS EB! This is the {endpoint} Environment')
-    return greeting
+    #greeting = hello(f'AWS EB! This is the {endpoint} Environment')
+    colors = ['Red', 'Blue', 'Black', 'Orange']
+    return render_template('test.html', colors=colors, environment=endpoint)
 
 @application.route('/states/<some_state>')
 def weather_page(some_state):

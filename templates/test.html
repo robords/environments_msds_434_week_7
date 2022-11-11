@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello from EB {{environment}}</title>
+</head>
+<body>
+<h1>Hello from EB {{environment}}</h1>
+<select name="color" method="GET" action="/">
+  <option value="{{colors[0]}}" selected>{{colors[0]}}</option>
+  {% for color in colors[1:] %}
+    <option value="{{colur}}">{{color}}</option>
+  {% endfor %}
+</select>
+
+</body>
+</html>
