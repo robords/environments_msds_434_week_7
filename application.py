@@ -44,8 +44,9 @@ def costs():
     except KeyError:
         endpoint = 'Local'
     df = get_list_of_services()
-    return render_template('tables.html', tables=[df.to_html(classes='data striped',
-                                                            index=False, escape=False)],
+    return render_template('tables.html', tables=[df.to_html(
+        classes='data table table-striped table-bordered table-hover table-sm',
+        index=False, escape=False, header=True)],
                            environment=endpoint, page_type='Costs')
 
 @application.route('/states', methods=['GET'])
@@ -55,8 +56,9 @@ def states():
     except KeyError:
         endpoint = 'Local'
     df = get_list_of_states()
-    return render_template('tables.html', tables=[df.to_html(classes='data striped',
-                                                            index=False, escape=False)],
+    return render_template('tables.html', tables=[df.to_html(
+        classes='data table table-striped table-bordered table-hover table-sm',
+        index=False, escape=False)],
                            environment=endpoint, page_type='States')
 
 @application.route('/states/<some_state>')

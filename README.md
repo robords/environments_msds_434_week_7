@@ -13,6 +13,19 @@ On AWS:
 * Open: eb open
 * Help: eb -h
 
+## Benchmarking
+
+On Mac, Apache Benchmarking is installed by default.  Check it out:
+
+`ab -h`
+
+Example:
+`ab -k -n 100 -c 10 http://127.0.0.1:8080/`
+
+* The -k parameter uses the “HTTP KeepAlive Feature”.
+* The -n parameter sets the request count (100 in this case).
+* The -c parameters sets the concurrent request count.
+* We performed the test on our local host
 
 ## Pipeline:
 https://aws.amazon.com/getting-started/hands-on/continuous-deployment-pipeline/
