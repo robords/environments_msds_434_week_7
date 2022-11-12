@@ -1,6 +1,5 @@
 import pandas as pd
 import boto3
-import json
 
 client = boto3.client('forecast', region_name='us-east-1')
 forecastquery = boto3.client(service_name='forecastquery', region_name='us-east-1')
@@ -80,7 +79,7 @@ def get_list_of_services():
     services = services.unique()
     service_list = list(services)
     route_list = [f'/costs/{i}' for i in service_list]
-    plot_list = [f'/costs/{i}/plot/<p10|p50|p90>' for i in service_list]
+    plot_list = [f'/costs/{i}/<p10|p50|p90>' for i in service_list]
 
     df = pd.DataFrame(list(zip(service_list, route_list, plot_list)), columns=['Services','Routes', 'Plots'])
     return df

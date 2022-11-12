@@ -10,8 +10,21 @@ import io
 import numpy as np
 import pandas as pd
 import seaborn as sns
-plt.rcParams["figure.figsize"] = [7.50, 3.50]
 plt.rcParams["figure.autolayout"] = True
+
+def plot_service(service, percentile):
+    fig,ax=plt.subplots(figsize=(14,7))
+    ax=sns.set(style="darkgrid")
+    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
+    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+    df['date'] = pd.to_datetime(df['date'])
+    chart = sns.lineplot(x='date',y='cost', data=df)
+    for item in chart.get_xticklabels():
+        item.set_rotation(45)
+    chart.set(title=f'{service} Forecast')
+    output = io.BytesIO()
+    FigureCanvas(fig).print_png(output)
+    return Response(output.getvalue(), mimetype='image/png')
 
 application = Flask(__name__)
 @application.route('/', methods=['GET'])
@@ -20,9 +33,20 @@ def index():
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
-    colors = ['Red', 'Blue', 'Black', 'Orange']
     df = get_list_of_services()
-    return render_template('test.html', tables=[df.to_html(classes='data')], titles=df.columns.values, colors=colors, environment=endpoint)
+    return render_template('index.html', environment=endpoint)
+
+@application.route('/costs', methods=['GET'])
+def costs():
+    try:
+        endpoint = os.environ['API_ENDPOINT']
+    except KeyError:
+        endpoint = 'Local'
+    df = get_list_of_services()
+    return render_template('costs.html', tables=[df.to_html(classes='highlight striped',
+                                                            index=False)],
+                           #titles=df.columns.values,
+                           environment=endpoint)
 
 @application.route('/states/<some_state>')
 def weather_page(some_state):
@@ -38,48 +62,17 @@ def cost_page(service):
     resp.status_code = 200
     return resp
 
-@application.route('/costs/<service>/plot/p50')
-def plot_service(service):
-    fig,ax=plt.subplots(figsize=(6,6))
-    ax=sns.set(style="darkgrid")
-    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p50')
-    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
-    df['date'] = pd.to_datetime(df['date'])
-    chart = sns.lineplot(x='date',y='cost', data=df)
-    for item in chart.get_xticklabels():
-        item.set_rotation(45)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+@application.route('/costs/<service>/p50')
+def plot_service_p50(service):
+    return plot_service(service, 'p50')
 
-@application.route('/costs/<service>/plot/p10')
+@application.route('/costs/<service>/p10')
 def plot_service_p10(service):
-    fig,ax=plt.subplots(figsize=(6,6))
-    ax=sns.set(style="darkgrid")
-    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p10')
-    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
-    df['date'] = pd.to_datetime(df['date'])
-    chart = sns.lineplot(x='date',y='cost', data=df)
-    for item in chart.get_xticklabels():
-        item.set_rotation(45)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+    return plot_service(service, 'p10')
 
-@application.route('/costs/<service>/plot/p90')
+@application.route('/costs/<service>/p90')
 def plot_service_p90(service):
-    fig,ax=plt.subplots(figsize=(10,5))
-    ax=sns.set(style="darkgrid")
-    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'p90')
-    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
-    df['date'] = pd.to_datetime(df['date'])
-    chart = sns.lineplot(x='date',y='cost', data=df)
-    for item in chart.get_xticklabels():
-        item.set_rotation(45)
-    chart.set(title=f'{service} Forecast')
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+    return plot_service(service, 'p90')
 
 @application.route('/print-plot')
 def plot_png():
