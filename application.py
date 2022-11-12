@@ -1,4 +1,5 @@
-from weather_predictions import hello, get_forecast_data, plot_forecast_data, get_list_of_services
+from weather_predictions import (get_forecast_data, plot_forecast_data, get_list_of_services,
+get_list_of_states)
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -43,10 +44,20 @@ def costs():
     except KeyError:
         endpoint = 'Local'
     df = get_list_of_services()
-    return render_template('costs.html', tables=[df.to_html(classes='highlight striped',
-                                                            index=False)],
-                           #titles=df.columns.values,
-                           environment=endpoint)
+    return render_template('tables.html', tables=[df.to_html(classes='data striped',
+                                                            index=False, escape=False)],
+                           environment=endpoint, page_type='Costs')
+
+@application.route('/states', methods=['GET'])
+def states():
+    try:
+        endpoint = os.environ['API_ENDPOINT']
+    except KeyError:
+        endpoint = 'Local'
+    df = get_list_of_states()
+    return render_template('tables.html', tables=[df.to_html(classes='data striped',
+                                                            index=False, escape=False)],
+                           environment=endpoint, page_type='States')
 
 @application.route('/states/<some_state>')
 def weather_page(some_state):

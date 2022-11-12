@@ -78,8 +78,20 @@ def get_list_of_services():
     services = get_file_from_s3(bucket, path)['service']
     services = services.unique()
     service_list = list(services)
-    route_list = [f'/costs/{i}' for i in service_list]
-    plot_list = [f'/costs/{i}/<p10|p50|p90>' for i in service_list]
+    route_list = [f'<a href="/costs/{i}">' + f"/costs/{i}" + '</a>' for i in service_list]
+    plot_list = [f'<a href="/costs/{i}/p90">' + f"/costs/{i}/p90" + '</a>' for i in service_list]
 
-    df = pd.DataFrame(list(zip(service_list, route_list, plot_list)), columns=['Services','Routes', 'Plots'])
+    df = pd.DataFrame(list(zip(service_list, route_list, plot_list)), columns=['Services','JSON', 'Plots'])
+    return df
+
+def get_list_of_states():
+    bucket = 'raw-weather-data'
+    path = 'SNOW'
+    locations = get_file_from_s3(bucket, path)['location']
+    locations = locations.unique()
+    location_list = list(locations)
+    route_list = [f'<a href="/states/{i}">' + f"/states/{i}" + '</a>' for i in location_list]
+    plot_list = [f'<a href="/states/{i}/p90">' + f"/states/{i}/p90" + '</a>' for i in location_list]
+
+    df = pd.DataFrame(list(zip(location_list, route_list, plot_list)), columns=['Locations','JSON', 'Plots'])
     return df
