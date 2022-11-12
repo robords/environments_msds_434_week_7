@@ -13,8 +13,12 @@ On AWS:
 * Open: eb open
 * Help: eb -h
 
-## Benchmarking
+## Benchmarking and logs
 
+__Logs__    
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.cloudwatchlogs.html
+
+__Benchmarking__    
 On Mac, Apache Benchmarking is installed by default.  Check it out:
 
 `ab -h`
