@@ -3,19 +3,17 @@ get_list_of_states)
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
 from matplotlib import pyplot as plt
 from flask import Flask, jsonify, Response, render_template, request
 import os
 import io
-import numpy as np
 import pandas as pd
 import seaborn as sns
 plt.rcParams["figure.autolayout"] = True
 
 def plot_service(service, percentile):
-    fig,ax=plt.subplots(figsize=(14,7))
-    ax=sns.set(style="darkgrid")
+    fig, ax = plt.subplots(figsize=(14,7))
+    ax = sns.set(style="darkgrid")
     xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
     df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
     df['date'] = pd.to_datetime(df['date'])
@@ -34,7 +32,7 @@ def index():
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
-    df = get_list_of_services()
+    #df = get_list_of_services()
     return render_template('index.html', environment=endpoint)
 
 @application.route('/costs', methods=['GET'])
