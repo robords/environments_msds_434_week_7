@@ -35,6 +35,14 @@ def index():
     #df = get_list_of_services()
     return render_template('index.html', environment=endpoint)
 
+@application.route('/about', methods=['GET'])
+def about():
+    try:
+        endpoint = os.environ['API_ENDPOINT']
+    except KeyError:
+        endpoint = 'Local'
+    return render_template('report.html', environment=endpoint)
+
 @application.route('/costs', methods=['GET'])
 def costs():
     try:
