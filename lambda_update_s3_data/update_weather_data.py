@@ -84,9 +84,6 @@ def get_and_put_data_from_noaa():
         s3_resource.Object(bucket, f'{i}/{current_year}.csv').put(Body=csv_buffer.getvalue())
 
 
-get_and_put_data_from_noaa()
-
-
 
 
 
