@@ -14,7 +14,7 @@ install:
 
 lambda:
 	pip install -r ./lambda_update_s3_data/requirements.txt --target ./lambda_update_s3_data
-	zip -r ./lambda_update_s3_data/lambda_update_s3_data.zip lambda_update_s3_data
 	cd ./lambda_update_s3_data
+	zip -r ./lambda_update_s3_data/lambda_update_s3_data.zip lambda_update_s3_data
 	rm -r -v !("stations.csv"|"lambda_update_s3_data.zip"|"update_weather_data.py"|"requirements.txt") 
 # for zsh, it's: rm -r -v ^(stations.csv|lambda_update_s3_data.zip|update_weather_data.py|requirements.txt)

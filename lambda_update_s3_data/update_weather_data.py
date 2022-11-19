@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import pandas as pd
-import boto3
+from lambda_update_s3_data import pandas as pd
+from lambda_update_s3_data import boto3
 import datetime
 from collections import defaultdict
 from io import StringIO
