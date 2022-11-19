@@ -34,7 +34,7 @@ def get_most_recent_date_from_s3():
     return most_recent_date_available
 
 
-def get_and_put_data_from_noaa():
+def get_and_put_data_from_noaa(event, context):
     '''
     The NOAA data is organized into yearly files, so all I need to do is overwrite the file
     for the year where we're trying to fill in the gaps
