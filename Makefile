@@ -12,5 +12,5 @@ install:
 	pip install -r requirements.txt
 
 lambda:
-	pip install -r ./lambda_update_s3_data/requirements.txt --target ./model
+	pip install -r ./lambda_update_s3_data/requirements.txt --target ./lambda_update_s3_data
 	zip -r ./lambda_update_s3_data/lambda_update_s3_data.zip lambda_update_s3_data
