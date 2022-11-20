@@ -34,7 +34,6 @@ def get_and_put_data_from_noaa():
     # filter out the columns with bad data
     most_recent_df =  most_recent_df[~(most_recent_df['Q-FLAG'].isnull())]
     # combine the file with the stations file to get the states
-    stations = pd.read_csv('./stations.csv')
     response = s3.get_object(Bucket='raw-weather-data', Key='ghcnd-stations.csv')
     print("got stations response")
     stations = pd.read_csv(response.get("Body"))
