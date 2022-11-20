@@ -4,7 +4,6 @@
 import pandas as pd
 import boto3
 import datetime
-from collections import defaultdict
 from io import StringIO
 
 

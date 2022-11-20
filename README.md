@@ -46,7 +46,7 @@ Alternately, if using AutoML, data can be tutorial data or custom dataLinks to a
 
 The main idea is for you to think about starting to create a portfolio.
 
-### Lambda    
+### Glue    
 Automatically pushes to S3 when updated in source code (specifically the zip file)    
 https://docs.aws.amazon.com/lambda/latest/dg/python-package.html
 
