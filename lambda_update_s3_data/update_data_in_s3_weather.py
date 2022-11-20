@@ -8,7 +8,7 @@ from collections import defaultdict
 from io import StringIO
 
 
-def get_and_put_data_from_noaa(event, context):
+def get_and_put_data_from_noaa():
     '''
     The NOAA data is organized into yearly files, so all I need to do is overwrite the file
     for the year where we're trying to fill in the gaps
@@ -58,7 +58,7 @@ def get_and_put_data_from_noaa(event, context):
         # This should release it from memory
         del df
 
-
+get_and_put_data_from_noaa()
 
 
 
