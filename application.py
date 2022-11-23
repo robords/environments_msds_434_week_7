@@ -1,5 +1,5 @@
 from weather_predictions import (get_forecast_data, plot_forecast_data, get_list_of_services,
-get_list_of_states)
+get_list_of_states, get_homepage_locations_list)
 import matplotlib
 matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -32,8 +32,12 @@ def index():
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
-    #df = get_list_of_services()
-    return render_template('index.html', environment=endpoint)
+    df = get_homepage_locations_list()
+    return render_template('index.html', environment=endpoint,
+                           tables=[df.to_html(
+                               classes='data table table-striped table-bordered table-hover table-sm',
+                               index=False, escape=False, header=True)]
+                           )
 
 @application.route('/about', methods=['GET'])
 def about():

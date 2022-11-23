@@ -95,3 +95,14 @@ def get_list_of_states():
 
     df = pd.DataFrame(list(zip(location_list, route_list, plot_list)), columns=['Locations','JSON', 'Plots'])
     return df
+
+
+def get_homepage_locations_list():
+    bucket = 'raw-weather-data'
+    path = 'SNOW'
+    locations = get_file_from_s3(bucket, path)['location']
+    locations = locations.unique()
+    location_list = list(locations)
+
+    df = pd.DataFrame(list(zip(location_list)), columns=['Locations'])
+    return df
