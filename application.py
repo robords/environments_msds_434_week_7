@@ -11,13 +11,19 @@ import pandas as pd
 import seaborn as sns
 plt.rcParams["figure.autolayout"] = True
 
-def plot_service(service, percentile):
+def plot_service(service, type, percentile):
     fig, ax = plt.subplots(figsize=(14,7))
     ax = sns.set(style="darkgrid")
-    xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
-    df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
-    df['date'] = pd.to_datetime(df['date'])
-    chart = sns.lineplot(x='date',y='cost', data=df)
+    if type == 'cost':
+        xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
+        df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+        df['date'] = pd.to_datetime(df['date'])
+        chart = sns.lineplot(x='date', y='cost', data=df)
+    else:
+        xs, ys = plot_forecast_data(f'{service}', "Snow_Forecast", percentile)
+        df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'precipitation'])
+        df['date'] = pd.to_datetime(df['date'])
+        chart = sns.lineplot(x='date', y='precipitation', data=df)
     for item in chart.get_xticklabels():
         item.set_rotation(45)
     chart.set(title=f'{service} Forecast')
@@ -26,17 +32,31 @@ def plot_service(service, percentile):
     return Response(output.getvalue(), mimetype='image/png')
 
 application = Flask(__name__)
-@application.route('/', methods=['GET'])
+@application.route('/', methods=['GET', 'POST'])
 def index():
     try:
         endpoint = os.environ['API_ENDPOINT']
     except KeyError: 
         endpoint = 'Local'
     df = get_homepage_locations_list()
-    return render_template('index.html', environment=endpoint,
-                           tables=[df.to_html(
+    errors = []
+    results = {}
+    if request.method == "POST":
+        try:
+            subset_id = request.form['location_filter']
+            df_filtered = df.loc[df["Locations"].str.contains(subset_id)]
+        except:
+            errors.append(
+                f"{request.form['location_filter']} isn't a location, please try again."
+            )
+    else:
+        df_filtered = df
+
+    return render_template('index.html', environment=endpoint, errors=errors, results=results,
+                           tables=[df_filtered.to_html(
                                classes='data table table-striped table-bordered table-hover table-sm',
-                               index=False, escape=False, header=True)]
+                               index=False, escape=False, header=True)],
+                           services=plot_service('VT', 'weather', 'p50')
                            )
 
 @application.route('/about', methods=['GET'])
@@ -78,6 +98,10 @@ def weather_page(some_state):
     resp.status_code = 200
     return resp
 
+@application.route('/states/<some_state>/p90')
+def plot_weather_p90(some_state):
+    return plot_service(some_state, 'weather', 'p90')
+
 @application.route('/costs/<service>')
 def cost_page(service):
     data = get_forecast_data(f'{service}', "Cost_Forecastv3")
@@ -87,15 +111,15 @@ def cost_page(service):
 
 @application.route('/costs/<service>/p50')
 def plot_service_p50(service):
-    return plot_service(service, 'p50')
+    return plot_service(service, 'cost', 'p50')
 
 @application.route('/costs/<service>/p10')
 def plot_service_p10(service):
-    return plot_service(service, 'p10')
+    return plot_service(service, 'cost', 'p10')
 
 @application.route('/costs/<service>/p90')
 def plot_service_p90(service):
-    return plot_service(service, 'p90')
+    return plot_service(service,'cost', 'p90')
 
 if __name__ == '__main__':
     application.run(host='127.0.0.1', port=8080, debug=True)

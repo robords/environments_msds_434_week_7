@@ -9,26 +9,32 @@ def hello(environment):
     result = f'Hello {environment}'
     return result
 
-def get_forecast_data(item, forecast_name):
+def get_forecast_data(item, dataset_name):
     """Return the forecast data"""
-
-    FORECAST_NAME = forecast_name #"SNOW_FORECAST"
-
-    if FORECAST_NAME in [i['ForecastName'] for i in client.list_forecasts()['Forecasts']]:
+    if [True for i in client.list_forecasts()['Forecasts'] if dataset_name in i['DatasetGroupArn']][0]:
         print('Found ARN')
-        forecast_arn = ([item for item in client.list_forecasts()['Forecasts'] 
-                             if item["ForecastName"] == FORECAST_NAME][0]['ForecastArn'])
+        # get the most recent forcast based on the dataset name
+        max_creation = max(([i['CreationTime'] for i in client.list_forecasts()['Forecasts']
+                             if dataset_name in i['DatasetGroupArn']]))
+        forecast_arn = ([i['ForecastArn'] for i in client.list_forecasts()['Forecasts'] if dataset_name in i['DatasetGroupArn']
+          and i['CreationTime'] == max_creation][0])
+
+    #FORECAST_NAME = dataset_name #"SNOW_FORECAST"
+
+    #if FORECAST_NAME in [i['ForecastName'] for i in client.list_forecasts()['Forecasts']]:
+
+        #forecast_arn = ([item for item in client.list_forecasts()['Forecasts'] if item["ForecastName"] == FORECAST_NAME][0]['ForecastArn'])
         result = forecastquery.query_forecast(
             ForecastArn=forecast_arn,
             Filters={"item_id": item}
         )
     else:
-        result = f"Could not find forecast {FORECAST_NAME}"
+        result = f"Could not find forecast for dataset {dataset_name}"
     
     return result
 
 
-def plot_forecast_data(item, forecast_name, percentile='p50'):
+def plot_forecast_data(item, dataset_name, percentile='p50'):
     """Return the forecast data in chart format
     {
       "Forecast": {
@@ -40,7 +46,7 @@ def plot_forecast_data(item, forecast_name, percentile='p50'):
             }, 
     """
 
-    result = get_forecast_data(item, forecast_name)
+    result = get_forecast_data(item, dataset_name)
     percentile = result['Forecast']['Predictions'][percentile]
     value_list = [i['Value'] for i in percentile]
     timestamp = [i['Timestamp'] for i in percentile]
