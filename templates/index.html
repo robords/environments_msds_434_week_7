@@ -27,16 +27,15 @@
                              {% endfor %}
                    </div>
                    <div class="col-sm-9 bg-light p-3 border">
-                             {% for service in services %}
-                             {{ service }}
-                             {% endfor %}
+                       <!--<img src="data:image/png;base64,{{ service }}" alt="Chart from Forecast">-->
+                       <img src={{ service }} alt="Chart from Forecast" height="400"/>
                    </div>
      </div>
       <!--JavaScript at end of body for optimized loading-->
       <script src="{{ url_for('static',filename='/js/bootstrap.js') }}" type="text/javascript"></script>
          <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
 </body>
 {% include 'footer.html' %}
 </html>

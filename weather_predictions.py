@@ -19,11 +19,6 @@ def get_forecast_data(item, dataset_name):
         forecast_arn = ([i['ForecastArn'] for i in client.list_forecasts()['Forecasts'] if dataset_name in i['DatasetGroupArn']
           and i['CreationTime'] == max_creation][0])
 
-    #FORECAST_NAME = dataset_name #"SNOW_FORECAST"
-
-    #if FORECAST_NAME in [i['ForecastName'] for i in client.list_forecasts()['Forecasts']]:
-
-        #forecast_arn = ([item for item in client.list_forecasts()['Forecasts'] if item["ForecastName"] == FORECAST_NAME][0]['ForecastArn'])
         result = forecastquery.query_forecast(
             ForecastArn=forecast_arn,
             Filters={"item_id": item}
@@ -47,11 +42,23 @@ def plot_forecast_data(item, dataset_name, percentile='p50'):
     """
 
     result = get_forecast_data(item, dataset_name)
-    percentile = result['Forecast']['Predictions'][percentile]
-    value_list = [i['Value'] for i in percentile]
-    timestamp = [i['Timestamp'] for i in percentile]
-    
-    return timestamp, value_list
+
+    if percentile == 'all':
+        percentile_p10 = result['Forecast']['Predictions']['p10']
+        timestamp = [i['Timestamp'] for i in percentile_p10]
+        p10 = [i['Value'] for i in percentile_p10]
+        percentile_p50 = result['Forecast']['Predictions']['p50']
+        p50 = [i['Value'] for i in percentile_p50]
+        percentile_p90 = result['Forecast']['Predictions']['p90']
+        p90 = [i['Value'] for i in percentile_p90]
+
+        return timestamp, p10, p50, p90
+    else:
+        percentile = result['Forecast']['Predictions'][percentile]
+        value_list = [i['Value'] for i in percentile]
+        timestamp = [i['Timestamp'] for i in percentile]
+
+        return timestamp, value_list
 
 
 def list_files_in_s3(bucket, path):
