@@ -1,5 +1,6 @@
 import pandas as pd
 import boto3
+from collections import defaultdict
 
 client = boto3.client('forecast', region_name='us-east-1')
 forecastquery = boto3.client(service_name='forecastquery', region_name='us-east-1')
@@ -9,7 +10,7 @@ def hello(environment):
     result = f'Hello {environment}'
     return result
 
-def get_forecast_data(item, dataset_name):
+def get_forecast_data(item, dataset_name, list_of_items):
     """Return the forecast data"""
     if [True for i in client.list_forecasts()['Forecasts'] if dataset_name in i['DatasetGroupArn']][0]:
         print('Found ARN')
@@ -18,11 +19,28 @@ def get_forecast_data(item, dataset_name):
                              if dataset_name in i['DatasetGroupArn']]))
         forecast_arn = ([i['ForecastArn'] for i in client.list_forecasts()['Forecasts'] if dataset_name in i['DatasetGroupArn']
           and i['CreationTime'] == max_creation][0])
-
-        result = forecastquery.query_forecast(
-            ForecastArn=forecast_arn,
-            Filters={"item_id": item}
-        )
+        if item == 'all':
+            forecast_dict = defaultdict(dict)
+            '''
+            for i in list_of_items:
+                result = forecastquery.query_forecast(
+                    ForecastArn=forecast_arn,
+                    Filters={"item_id": i}
+                )
+                percentile_p10 = result['Forecast']['Predictions']['p10']
+                forecast_dict['Timestamp'] = [i['Timestamp'] for i in percentile_p10]
+                forecast_dict['p10'] = [x + y for x, y in zip(forecast_dict['p10'], [i['Value'] for i in percentile_p10])]
+                percentile_p50 = result['Forecast']['Predictions']['p50']
+                forecast_dict['p50'] = [x + y for x, y in zip(forecast_dict['p50'], [i['Value'] for i in percentile_p50])]
+                percentile_p90 = result['Forecast']['Predictions']['p90']
+                forecast_dict['p90'] = [x + y for x, y in zip(forecast_dict['p90'], [i['Value'] for i in percentile_p90])]
+            '''
+            return "Summary View in WIP"#forecast_dict
+        else:
+            result = forecastquery.query_forecast(
+                ForecastArn=forecast_arn,
+                Filters={"item_id": item}
+            )
     else:
         result = f"Could not find forecast for dataset {dataset_name}"
     
@@ -40,25 +58,33 @@ def plot_forecast_data(item, dataset_name, percentile='p50'):
               "Value": -1.2800201246720988e-05
             }, 
     """
-
-    result = get_forecast_data(item, dataset_name)
-
-    if percentile == 'all':
-        percentile_p10 = result['Forecast']['Predictions']['p10']
-        timestamp = [i['Timestamp'] for i in percentile_p10]
-        p10 = [i['Value'] for i in percentile_p10]
-        percentile_p50 = result['Forecast']['Predictions']['p50']
-        p50 = [i['Value'] for i in percentile_p50]
-        percentile_p90 = result['Forecast']['Predictions']['p90']
-        p90 = [i['Value'] for i in percentile_p90]
-
+    if item == 'all':
+        list_of_items = list(get_homepage_locations_list()['Locations'])
+        result = get_forecast_data('all', dataset_name, list_of_items)
+        timestamp = result['Timestamp']
+        p10 = result['p10']
+        p50 = result['p50']
+        p90 = result['p90']
         return timestamp, p10, p50, p90
     else:
-        percentile = result['Forecast']['Predictions'][percentile]
-        value_list = [i['Value'] for i in percentile]
-        timestamp = [i['Timestamp'] for i in percentile]
+        result = get_forecast_data(item, dataset_name, '')
 
-        return timestamp, value_list
+        if percentile == 'all':
+            percentile_p10 = result['Forecast']['Predictions']['p10']
+            timestamp = [i['Timestamp'] for i in percentile_p10]
+            p10 = [i['Value'] for i in percentile_p10]
+            percentile_p50 = result['Forecast']['Predictions']['p50']
+            p50 = [i['Value'] for i in percentile_p50]
+            percentile_p90 = result['Forecast']['Predictions']['p90']
+            p90 = [i['Value'] for i in percentile_p90]
+
+            return timestamp, p10, p50, p90
+        else:
+            percentile = result['Forecast']['Predictions'][percentile]
+            value_list = [i['Value'] for i in percentile]
+            timestamp = [i['Timestamp'] for i in percentile]
+
+            return timestamp, value_list
 
 
 def list_files_in_s3(bucket, path):
@@ -116,6 +142,7 @@ def get_homepage_locations_list():
     locations = get_file_from_s3(bucket, path)['location']
     locations = locations.unique()
     location_list = list(locations)
+    button_list = [f'<button type="button" onClick="load_chart()" class="btn btn-primary" name="submit_button" value={i}>{i}</button>' for i in location_list]
 
-    df = pd.DataFrame(list(zip(location_list)), columns=['Locations'])
+    df = pd.DataFrame(list(zip(location_list, button_list)), columns=['Locations', 'View Chart'])
     return df

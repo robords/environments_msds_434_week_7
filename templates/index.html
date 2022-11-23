@@ -22,11 +22,25 @@
                                 <h4>{{ error }}</h4>
                               {% endfor %}
                        <br>
+                       <!--
+                       <form method=['GET','POST']>
+                            <select name="colours">
+                                <option value="0">Empty</option>
+                                <option value="1">Blue</option>
+                                <option value="2">Red</option>
+                                <option value="3">White</option>
+                                <option value="4">Gray</option>
+                            </select>
+                            <br>
+                            <input type="submit" value="submit">
+                        </form> -->
+                       <br>
                              {% for table in tables %}
                              {{ table|safe }}
                              {% endfor %}
                    </div>
                    <div class="col-sm-9 bg-light p-3 border">
+                       <!--<p>{{mycolours}}</p>-->
                        <!--<img src="data:image/png;base64,{{ service }}" alt="Chart from Forecast">-->
                        <img src={{ service }} alt="Chart from Forecast" height="400"/>
                    </div>

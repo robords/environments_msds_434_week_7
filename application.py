@@ -15,28 +15,40 @@ plt.rcParams["figure.autolayout"] = True
 def plot_service(service, type, percentile):
     fig, ax = plt.subplots(figsize=(14,7))
     ax = sns.set(style="darkgrid")
-    if percentile == 'all':
+    if service == 'all':
         if type == 'cost':
-            timestamp, p10, p50, p90 = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'all')
+            timestamp, p10, p50, p90 = plot_forecast_data('all', "Cost_Forecastv3", 'all')
             df = pd.DataFrame(list(zip(timestamp, p10, p50, p90)), columns=['date', 'p10', 'p50', 'p90'])
             df['date'] = pd.to_datetime(df['date'])
             chart = sns.lineplot(x='date', y='value', hue='variable', data=pd.melt(df, ['date']))
         else:
-            timestamp, p10, p50, p90 = plot_forecast_data(f'{service}', "Snow_Forecast", 'all')
+            timestamp, p10, p50, p90 = plot_forecast_data('all', "Snow_Forecast", 'all')
             df = pd.DataFrame(list(zip(timestamp, p10, p50, p90)), columns=['date', 'p10', 'p50', 'p90'])
             df['date'] = pd.to_datetime(df['date'])
             chart = sns.lineplot(x='date', y='value', hue='variable', data=pd.melt(df, ['date']))
     else:
-        if type == 'cost':
-            xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
-            df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
-            df['date'] = pd.to_datetime(df['date'])
-            chart = sns.lineplot(x='date', y='cost', data=df)
+        if percentile == 'all':
+            if type == 'cost':
+                timestamp, p10, p50, p90 = plot_forecast_data(f'{service}', "Cost_Forecastv3", 'all')
+                df = pd.DataFrame(list(zip(timestamp, p10, p50, p90)), columns=['date', 'p10', 'p50', 'p90'])
+                df['date'] = pd.to_datetime(df['date'])
+                chart = sns.lineplot(x='date', y='value', hue='variable', data=pd.melt(df, ['date']))
+            else:
+                timestamp, p10, p50, p90 = plot_forecast_data(f'{service}', "Snow_Forecast", 'all')
+                df = pd.DataFrame(list(zip(timestamp, p10, p50, p90)), columns=['date', 'p10', 'p50', 'p90'])
+                df['date'] = pd.to_datetime(df['date'])
+                chart = sns.lineplot(x='date', y='value', hue='variable', data=pd.melt(df, ['date']))
         else:
-            xs, ys = plot_forecast_data(f'{service}', "Snow_Forecast", percentile)
-            df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'precipitation'])
-            df['date'] = pd.to_datetime(df['date'])
-            chart = sns.lineplot(x='date', y='precipitation', data=df)
+            if type == 'cost':
+                xs, ys = plot_forecast_data(f'{service}', "Cost_Forecastv3", percentile)
+                df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'cost'])
+                df['date'] = pd.to_datetime(df['date'])
+                chart = sns.lineplot(x='date', y='cost', data=df)
+            else:
+                xs, ys = plot_forecast_data(f'{service}', "Snow_Forecast", percentile)
+                df = pd.DataFrame(list(zip(xs, ys)), columns=['date', 'precipitation'])
+                df['date'] = pd.to_datetime(df['date'])
+                chart = sns.lineplot(x='date', y='precipitation', data=df)
     for item in chart.get_xticklabels():
         item.set_rotation(45)
     chart.set(title=f'{service} Forecast')
@@ -59,7 +71,18 @@ def index():
         try:
             subset_id = request.form['location_filter']
             df_filtered = df.loc[df["Locations"].str.contains(subset_id)]
-            img = f"/states/{subset_id}/all" #plot_service(subset_id, 'weather', 'all')
+            if len(subset_id) == 2:
+                img = f"/states/{subset_id}/all"
+            else:
+                img = "/states/VT/all"
+            #mycolours = request.form.get('colours')
+            '''
+            try:
+                submit_button = request.form["btn-pressed"]#len(subset_id) == 2:
+                img = f"/states/{submit_button}/all"
+            except:
+                img = f"/states/VT/all"
+            '''
         except:
             errors.append(
                 f"{request.form['location_filter']} isn't a location, please try again."
@@ -72,7 +95,7 @@ def index():
                            tables=[df_filtered.to_html(
                                classes='data table table-striped table-bordered table-hover table-sm',
                                index=False, escape=False, header=True)],
-                           service=img
+                           service=img#, mycolours=mycolours
                            )
 
 @application.route('/about', methods=['GET'])
@@ -109,7 +132,7 @@ def states():
 
 @application.route('/states/<some_state>')
 def weather_page(some_state):
-    data = get_forecast_data(f'{some_state}', "Snow_Forecast")
+    data = get_forecast_data(f'{some_state}', "Snow_Forecast", '')
     resp = jsonify(data)
     resp.status_code = 200
     return resp
@@ -118,13 +141,17 @@ def weather_page(some_state):
 def plot_weather_all(some_state):
     return plot_service(some_state, 'weather', 'all')
 
+@application.route('/plot/combined')
+def plot_weather_combined():
+    return plot_service('all', 'weather', 'all')
+
 @application.route('/states/<some_state>/p90')
 def plot_weather_p90(some_state):
     return plot_service(some_state, 'weather', 'p90')
 
 @application.route('/costs/<service>')
 def cost_page(service):
-    data = get_forecast_data(f'{service}', "Cost_Forecastv3")
+    data = get_forecast_data(f'{service}', "Cost_Forecastv3", '')
     resp = jsonify(data)
     resp.status_code = 200
     return resp
