@@ -151,11 +151,13 @@ def weather_page(some_state):
 def plot_weather_all(some_state):
     return plot_service(some_state, 'weather', 'all')
 
+@application.route('/states/<some_state>/p10')
+def plot_weather_p10(some_state):
+    return plot_service(some_state, 'weather', 'p10')
 
-@application.route('/plot/combined')
-def plot_weather_combined():
-    return plot_service('all', 'weather', 'all')
-
+@application.route('/states/<some_state>/p50')
+def plot_weather_p50(some_state):
+    return plot_service(some_state, 'weather', 'p50')
 
 @application.route('/states/<some_state>/p90')
 def plot_weather_p90(some_state):
@@ -169,6 +171,9 @@ def cost_page(service):
     resp.status_code = 200
     return resp
 
+@application.route('/costs/<service>/all')
+def plot_service_all(service):
+    return plot_service(service, 'cost', 'all')
 
 @application.route('/costs/<service>/p50')
 def plot_service_p50(service):

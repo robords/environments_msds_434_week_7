@@ -139,10 +139,10 @@ def get_list_of_states():
     locations = locations.unique()
     location_list = list(locations)
     route_list = [
-        f'''<button type="button" class="btn btn-success" onclick="location.href='{"states/" + i}';">Click to view {{JSON}} data</button>'''
+        f'''<button type="button" class="btn btn-success" onclick="window.open('{"states/" + i}', '_blank');">Click to view {{JSON}} data</button>'''
         for i in location_list]
     plot_list = [
-        f'''<button type="button" class="btn btn-info" onclick="location.href='{"states/" + i + "/all"}';">Click for Expanded Chart</button>'''
+        f'''<button type="button" class="btn btn-info" onclick="window.open('{"states/" + i + "/all"}', '_blank');">Click for Expanded Chart</button>'''
         for i in location_list]
 
     df = pd.DataFrame(list(zip(location_list, route_list, plot_list)), columns=['Locations', 'JSON', 'Plots'])
@@ -156,10 +156,10 @@ def get_homepage_locations_list():
     locations = locations.unique()
     location_list = list(locations)
     json_button_list = [
-        f'''<button type="button" class="btn btn-success" onclick="location.href='{"states/" + i}';">{{JSON}}</button>'''
+        f'''<button type="button" class="btn btn-success" onclick="window.open('{"states/" + i}', '_blank');">{{JSON}}</button>'''
         for i in location_list]
     chart_button_list = [
-        f'''<button type="button" class="btn btn-info" onclick="location.href='{"states/" + i + "/all"}';">Chart</button>'''
+        f'''<button type="button" class="btn btn-info" onclick="window.open('{"states/" + i + "/all"}', '_blank');">Chart</button>'''
         for i in location_list]
 
     df = pd.DataFrame(list(zip(location_list, json_button_list, chart_button_list)),
